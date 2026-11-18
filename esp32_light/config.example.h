@@ -1,4 +1,4 @@
-// Template: copy to config.h (./set_wifi.sh does it) and edit that. config.h is not committed.
+// Template: copy to config.h (set_wifi.sh does it) and edit that. config.h is not committed.
 
 // Same Wi-Fi network as the broker computer and the Pi. Must be 2.4 GHz.
 #define WIFI_SSID     "your-wifi-name"

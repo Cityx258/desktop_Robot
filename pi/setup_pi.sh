@@ -1,8 +1,8 @@
 #!/bin/bash
 # One-time setup of the robot on the Pi Zero (Raspberry Pi OS Lite, trixie).
-# Run it from the project folder on the Pi:   ./setup_pi.sh
+# Run it on the Pi, in the folder the pi/ files were copied to (~/desktop_Robot): ./setup_pi.sh
+# As root: sudo ROBOT_USER=<user> ./setup_pi.sh
 # Safe to run again: every step checks before changing anything.
-# (firstboot.sh runs it as root with ROBOT_USER set, on the Pi's first boot.)
 set -e
 cd "$(dirname "$0")"
 DIR=$(pwd)
@@ -20,7 +20,7 @@ echo "== Python environment (.venv, sees the apt packages)"
 
 echo "== Interfaces in $CFG"
 NEED_REBOOT=0
-for line in dtparam=i2c_arm=on dtparam=i2c_arm_baudrate=400000 dtparam=spi=on dtoverlay=wm8960-soundcard \
+for line in dtparam=i2c_arm=on dtparam=i2c_arm_baudrate=100000 dtparam=spi=on dtoverlay=wm8960-soundcard \
             gpio=5,6,12,13=op,dl; do   # last one: motor pins low from power-on
   if ! grep -qx "$line" "$CFG"; then
     echo "$line" | sudo tee -a "$CFG" >/dev/null

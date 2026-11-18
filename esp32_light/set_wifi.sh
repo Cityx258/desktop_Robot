@@ -1,7 +1,7 @@
 #!/bin/bash
-# Asks for the Wi-Fi name and password and writes them into esp32_light/config.h.
+# Asks for the Wi-Fi name and password and writes them into config.h (next to this script).
 cd "$(dirname "$0")"
-[ -f esp32_light/config.h ] || cp esp32_light/config.example.h esp32_light/config.h
+[ -f config.h ] || cp config.example.h config.h
 
 read -r -p "Wi-Fi name: " SSID
 read -r -s -p "Wi-Fi password (hidden while typing): " PASS
@@ -9,7 +9,7 @@ echo
 
 SSID="$SSID" PASS="$PASS" python3 - <<'EOF'
 import os, re
-path = "esp32_light/config.h"
+path = "config.h"
 esc = lambda s: s.replace("\\", "\\\\").replace('"', '\\"')
 text = open(path).read()
 text = re.sub(r'(#define WIFI_SSID\s+)".*"', lambda m: m.group(1) + '"' + esc(os.environ["SSID"]) + '"', text)

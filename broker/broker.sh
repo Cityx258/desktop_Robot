@@ -15,7 +15,7 @@ running() { pgrep -f "mosquitto -c $CONF" >/dev/null; }
 
 my_ip() {
   if [ "$(uname)" = Darwin ]; then ipconfig getifaddr en0
-  else hostname -I | awk '{print $1}'; fi
+  else ip -4 route get 1.1.1.1 2>/dev/null | sed -nE 's/.* src ([0-9.]+).*/\1/p'; fi
 }
 
 case "$1" in
@@ -27,7 +27,7 @@ case "$1" in
     nohup "$MOSQUITTO" -c "$CONF" -v >"$LOG" 2>&1 &
     sleep 1
     if running; then
-      echo "Broker started. Use MQTT_HOST=$(my_ip) (ESP32 config.h, and the voice script if it runs on another machine)"
+      echo "Broker started. Use MQTT_HOST=$(my_ip) (esp32_light/config.h, and host in the Pi's robot.conf)"
     else
       echo "Broker failed to start:"; tail -5 "$LOG"
       grep -q "Address already in use" "$LOG" && echo "Port 1883 is taken. On the Pi, stop the system broker first: sudo systemctl disable --now mosquitto"

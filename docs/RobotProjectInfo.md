@@ -99,7 +99,7 @@ GPIO14/15 (UART) are free if the serial console is disabled.
   - LEDs: APA102 over SPI0 (`spidev`), with SPI enabled in raspi-config.
 - Interfaces to enable in `raspi-config`: I2C, SPI.
 
-## Suggested project layout
+## Suggested project layout (now in `pi/robot/`)
 
 ```
 robot/

@@ -12,7 +12,7 @@ CFG=/boot/firmware/config.txt
 echo "== Packages (apt, so nothing has to compile on the Pi Zero)"
 sudo apt-get update
 sudo apt-get install -y python3-venv python3-gpiozero python3-lgpio python3-paho-mqtt \
-  python3-smbus2 python3-spidev python3-pil alsa-utils flac i2c-tools
+  python3-smbus2 python3-spidev python3-pil alsa-utils flac i2c-tools git
 
 echo "== Python environment (.venv, sees the apt packages)"
 [ -d .venv ] || python3 -m venv --system-site-packages .venv
@@ -73,6 +73,30 @@ RestartSec=3
 [Install]
 WantedBy=multi-user.target
 EOF
+REPO=$(git -C "$DIR" rev-parse --show-toplevel 2>/dev/null || true)
+if [ -n "$REPO" ]; then
+  echo "== Auto-update at boot (robot-update.service: git pull in $REPO)"
+  sudo tee /etc/systemd/system/robot-update.service >/dev/null <<EOF
+[Unit]
+Description=Update the desktop robot's code (git pull) before it starts
+After=network-online.target
+Wants=network-online.target
+Before=robot.service
+
+[Service]
+Type=oneshot
+User=$RUN_USER
+ExecStart=/usr/bin/git -C $REPO pull --ff-only
+TimeoutStartSec=60
+
+[Install]
+WantedBy=multi-user.target
+EOF
+  sudo systemctl daemon-reload
+  sudo systemctl enable robot-update.service
+else
+  echo "== Auto-update skipped: $DIR isn't inside a git clone"
+fi
 sudo systemctl daemon-reload
 
 echo

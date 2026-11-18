@@ -137,16 +137,22 @@ its own sub-network: from the PC, ssh only works when the Pi is on the PC's own 
 
 Find the Pi's IP from the PC: `nmap -sn 192.168.2.0/24 | grep -i -A2 miku`.
 
-### Install (from the PC, over ssh)
+### Install (on the Pi, over ssh)
 
 ```bash
-scp -r pi mikubot@<pi-ip>:desktop_Robot      # first time (later: scp the changed files)
 ssh mikubot@<pi-ip>
-cd ~/desktop_Robot
+sudo apt install -y git
+git clone https://github.com/Cityx258/desktop_Robot.git ~/desktop_Robot
+cd ~/desktop_Robot/pi
 ./setup_pi.sh                    # 10-20 min on a Pi Zero; reboot + run again if it says so
 nano robot.conf                  # [mqtt] host = the broker's IP
 sudo systemctl enable --now robot   # start now and at every boot
 ```
+
+**Updates:** at every boot, `robot-update.service` runs `git pull` before the robot starts,
+so pushing to GitHub is enough: reboot the Pi (or `sudo systemctl start robot-update &&
+sudo systemctl restart robot`). Without internet it keeps the code it has. New apt or pip
+packages still need `./setup_pi.sh` again.
 
 ### Test each part
 

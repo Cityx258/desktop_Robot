@@ -1,0 +1,21 @@
+# Secrets: real settings, copied from the *.example files
+robot.conf
+esp32_light/config.h
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Generated / runtime
+*.log
+face_preview.png
+pc/card-logs.txt
+
+# Editors / OS
+.vscode/
+.idea/
+*.swp
+.DS_Store
+~$*
+.~lock.*

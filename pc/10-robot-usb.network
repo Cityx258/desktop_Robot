@@ -1,0 +1,17 @@
+# This PC's side of the USB cable to the robot's Pi Zero (USB gadget networking).
+# Install once:   sudo cp pc/10-robot-usb.network /etc/systemd/network/ && sudo networkctl reload
+# Then, with the Pi plugged into this PC by its USB *data* port:   ssh mikubot@10.55.0.2
+#
+# Matches the fixed MAC the Pi gives this end of the link (g_ether.host_addr in the Pi's
+# cmdline.txt, set by prepare_sd.sh), so it never touches any other network interface.
+# Sorts before 20-ethernet.network, which would otherwise try DHCP on it.
+
+[Match]
+MACAddress=02:52:4f:42:00:01
+
+[Link]
+RequiredForOnline=no
+
+[Network]
+Address=10.55.0.1/24
+MulticastDNS=yes

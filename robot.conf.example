@@ -1,0 +1,28 @@
+# Settings for one robot. Copy to robot.conf (next to this file) and edit.
+# robot.conf holds passwords: don't share it or commit it.
+
+[robot]
+# Used in MQTT topics (robot/<name>/...) and as the MQTT client id. Unique per robot.
+name = mikubot
+
+[mqtt]
+# Local demo broker: the laptop running ./broker.sh. Either its IP (printed by
+# ./broker.sh start) or <hostname>.local, which keeps working when the IP changes.
+# Behind a phone hotspot that shares another network, <hostname>.local doesn't work: use the IP.
+host = 192.168.1.50
+port = 1883
+tls = false
+user =
+password =
+# Online broker later, e.g. HiveMQ Cloud: port 8883, tls = true, user/password set.
+# ca_file is only needed if the broker's certificate isn't from a public CA.
+ca_file =
+
+[voice]
+# en-US, fr-CA, ... (the command words in robot/voice.py are English for now)
+language = en-US
+
+[devices]
+# Spoken name = MQTT topic prefix. The robot sends ON/OFF/TOGGLE to <prefix>/set.
+# The ESP32 lamp listens on home/robot/light/set.
+light = home/robot/light
